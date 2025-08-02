@@ -1,3 +1,3 @@
 # LibraryProject
 
-A Django-based project for managing books, authors, and borrowers.
+This Django project manages a simple library system with books, authors, and settings.
