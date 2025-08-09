@@ -53,6 +53,9 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'relationship_app/login.html', {'form': form})
 
+def is_librarian(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+
 @login_required
 def logout_view(request):
     logout(request)
@@ -61,23 +64,21 @@ def logout_view(request):
 def is_admin(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
-def is_librarian(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
 def is_member(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
 # Admin view
-@user_passes_test(is_admin, login_url='/no-access/', redirect_field_name=None)
+@user_passes_test(is_admin)
 def admin_view(request):
     return render(request, 'admin_view.html')
 
 # Librarian view
-@user_passes_test(is_librarian, login_url='/no-access/', redirect_field_name=None)
+@user_passes_test(is_librarian)
 def librarian_view(request):
     return render(request, 'librarian_view.html')
 
 # Member view
-@user_passes_test(is_member, login_url='/no-access/', redirect_field_name=None)
+@user_passes_test(is_member)
 def member_view(request):
     return render(request, 'member_view.html')
