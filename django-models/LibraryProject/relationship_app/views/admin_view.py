@@ -5,6 +5,6 @@ from django.contrib.auth.decorators import user_passes_test
 def is_admin(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, login_url='/no-access/', redirect_field_name=None)
 def admin_view(request):
-    return render(request, 'admin_page.html')
+    return render(request, 'admin_view.html')
