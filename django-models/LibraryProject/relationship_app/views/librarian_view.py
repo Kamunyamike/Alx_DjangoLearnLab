@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 def is_librarian(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
-@user_passes_test(is_librarian)
+@user_passes_test(is_librarian, login_url='/no-access/', redirect_field_name=None)
 def librarian_view(request):
     return render(request, 'librarian_page.html')
+    
