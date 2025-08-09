@@ -5,7 +5,7 @@ from .models import Book, Library
 
 # Function-based view for listing books
 def book_list(request):
-    books = Book.objects.select_related('author').all()  # Optimized query
+    books = Book.objects.all()  # Required query
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
 
