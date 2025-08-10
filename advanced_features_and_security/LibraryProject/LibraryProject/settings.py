@@ -138,4 +138,3 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Media files (for user-uploaded files like profile photos)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-pip install Pillow
