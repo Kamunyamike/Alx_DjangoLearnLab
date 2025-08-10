@@ -1,0 +1,17 @@
+from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
+
+# A ‘Librarian’ view accessible only to users identified as ‘Librarians’. task
+@user_passes_test(is_librarian, login_url='/no-access/', redirect_field_name=None)
+def librarian_view(request):
+    return render(request, 'librarian_view.html')
+
+# Test function to check if the user is a Librarian
+def is_librarian(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarians'
+
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'librarian_view.html')
+    
+
