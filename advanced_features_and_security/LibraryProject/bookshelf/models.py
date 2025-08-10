@@ -7,13 +7,24 @@ class Author(models.Model):
 
     def __str__(self):
         return self.name
+from django.db import models
+
 class Book(models.Model):
     title = models.CharField(max_length=200)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    publication_year = models.IntegerField()
+    author = models.CharField(max_length=100)
+    published_date = models.DateField()
 
     def __str__(self):
-        return f"{self.title} by {self.author.name}"
+        return self.title
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+        ]
+
     
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
