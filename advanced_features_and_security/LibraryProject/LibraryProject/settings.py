@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-awsug=cr@d#!m%0(gki6l8g!8a655^f-%#76t1p#m6wsr37s^='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -140,3 +140,20 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Media files (for user-uploaded files like profile photos)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Browser protections
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'   # or 'SAMEORIGIN' if you embed the site in frames
+
+# Cookies — requires HTTPS in production
+SESSION_COOKIE_SECURE = True      # send session cookie only over HTTPS
+CSRF_COOKIE_SECURE = True         # send csrf cookie only over HTTPS
+CSRF_COOKIE_HTTPONLY = True       # prevents JS access to CSRF cookie (optional)
+SESSION_COOKIE_HTTPONLY = True
+
+# HSTS (only enable after you have HTTPS fully configured)
+SECURE_HSTS_SECONDS = 31536000    # one year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
