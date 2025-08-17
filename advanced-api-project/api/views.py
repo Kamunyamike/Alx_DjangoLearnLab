@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import filters  # This import is required
 from django_filters.rest_framework import DjangoFilterBackend
-
+from django_filters import rest_framework as filters
 from .models import Book
 from .serializers import BookSerializer
 from .filters import BookFilter  # Assuming you have created this file
