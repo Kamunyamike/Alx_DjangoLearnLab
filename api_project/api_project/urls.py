@@ -19,6 +19,6 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('books/', BookListCreateAPIView.as_view(), name='book-list'),  # Maps to the BookList view
+    path('books/', BookListAPIView.as_view(), name='book-list'),
     path('api/', include('api.urls'))
 ]
