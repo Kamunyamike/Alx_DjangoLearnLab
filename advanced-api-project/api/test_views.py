@@ -45,7 +45,7 @@ class BookAPITests(APITestCase):
         """
         Test that an authenticated user can create a new book.
         """
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpassword')
         data = {
             'title': 'Animal Farm',
             'publication_year': 1945,
@@ -80,7 +80,7 @@ class BookAPITests(APITestCase):
         """
         Test that an authenticated user can update an existing book.
         """
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpassword')
         data = {'title': 'Nineteen Eighty-Four'}
         response = self.client.patch(self.update_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -101,7 +101,7 @@ class BookAPITests(APITestCase):
         """
         Test that an authenticated user can delete a book.
         """
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpassword')
         response = self.client.delete(self.delete_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Book.objects.count(), 0)
