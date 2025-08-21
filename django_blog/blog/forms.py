@@ -6,7 +6,7 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
-        # Use the 'widgets' dictionary to apply a custom widget to a field.
+        # This is the correct way to apply a widget.
         widgets = {
             'tags': forms.TextInput(attrs={'class': 'tag-input-field', 'placeholder': 'Tags separated by commas'}),
         }
