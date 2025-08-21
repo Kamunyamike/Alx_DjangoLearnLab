@@ -22,7 +22,7 @@ urlpatterns = [
     path('profile/', profile_view, name='profile'),
     
     # Comment URLs
-    path('post/<int:pk>/comment/new/', CommentCreateView.as_view(), name='add_comment'),
+    path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='add_comment'),
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
 ]
