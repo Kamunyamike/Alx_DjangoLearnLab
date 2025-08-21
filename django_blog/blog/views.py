@@ -14,6 +14,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from datetime import datetime
+from django.db.models import Q
+from taggit.models import Tag
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
 
@@ -112,17 +114,14 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     form_class = CommentForm
     
     def form_valid(self, form):
-        # We need to get the post instance from the URL's primary key
         pk = self.kwargs.get('pk')
         post = get_object_or_404(Post, pk=pk)
         
-        # Assign the post and author to the new comment
         form.instance.post = post
         form.instance.author = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
-        # Redirect to the post detail page after a successful comment
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -147,3 +146,31 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
+
+# New Views for Search and Tagging
+def search_view(request):
+    query = request.GET.get('q')
+    posts = Post.objects.none()
+    
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct().order_by('-created_at')
+
+    context = {
+        'query': query,
+        'posts': posts
+    }
+    return render(request, 'blog/search_results.html', context)
+
+def posts_by_tag(request, tag_slug):
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    posts = Post.objects.filter(tags__in=[tag]).order_by('-created_at')
+    
+    context = {
+        'tag': tag,
+        'posts': posts,
+    }
+    return render(request, 'blog/posts_by_tag.html', context)
