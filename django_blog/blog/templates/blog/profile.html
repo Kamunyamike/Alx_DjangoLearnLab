@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+Profile - Django Blog
+{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}!</h1>
+<p>This is your profile page.</p>
+<a href="{% url 'logout' %}">Logout</a>
+{% endblock %}
