@@ -8,8 +8,6 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'tags']
         widgets = {
-            # This is the correct way to use a custom widget
-            # for the 'tags' field.
             'tags': TagWidget(attrs={'class': 'tag-input-field', 'placeholder': 'Tags separated by commas'}),
         }
 
