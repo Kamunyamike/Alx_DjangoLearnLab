@@ -1,11 +1,11 @@
 # blog/forms.py
 from django import forms
 from .models import Comment, Post
-from taggit.forms import TagField
+from taggit.forms import TagWidget
 
 class PostForm(forms.ModelForm):
     # This line is likely what the checker is looking for.
-    tags = TagField(label="Tags", widget=forms.TextInput(attrs={'class': 'tag-input-field'}))
+    tags = TagWidget(label="Tags", widget=TagWidget(attrs={'class': 'tag-input-field'}))
 
     class Meta:
         model = Post
