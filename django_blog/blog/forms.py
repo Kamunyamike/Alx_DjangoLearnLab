@@ -4,12 +4,14 @@ from .models import Comment, Post
 from taggit.forms import TagWidget
 
 class PostForm(forms.ModelForm):
-    # This line is likely what the checker is looking for.
-    tags = TagWidget(label="Tags", widget=TagWidget(attrs={'class': 'tag-input-field'}))
-
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
+        widgets = {
+            # This is the correct way to use a custom widget
+            # for the 'tags' field.
+            'tags': TagWidget(attrs={'class': 'tag-input-field', 'placeholder': 'Tags separated by commas'}),
+        }
 
 class CommentForm(forms.ModelForm):
     class Meta:
