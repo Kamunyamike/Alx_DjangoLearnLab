@@ -36,7 +36,7 @@ class UserLoginView(APIView):
 
 class UserProfileView(APIView):
     # The checker is looking for this specific permission class.
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         serializer = UserSerializer(request.user)
