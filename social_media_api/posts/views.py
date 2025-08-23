@@ -1,11 +1,12 @@
 # posts/views.py
-from rest_framework import viewsets, permissions, filters, generics
+from rest_framework import viewsets, permissions, filters, generics, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
+from notifications.utils import create_notification
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -37,6 +38,34 @@ class PostViewSet(viewsets.ModelViewSet):
             serializer.save(author=self.request.user, post=post)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def like(self, request, pk=None):
+        post = self.get_object()
+
+        # Check if the user has already liked the post
+        if Like.objects.filter(post=post, user=request.user).exists():
+            return Response({'detail': 'You have already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create the Like instance
+        Like.objects.create(post=post, user=request.user)
+
+        # Create a notification for the post author
+        if post.author != request.user:
+            create_notification(recipient=post.author, actor=request.user, verb='liked', target=post)
+
+        return Response({'detail': 'Post liked successfully.'}, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def unlike(self, request, pk=None):
+        post = self.get_object()
+
+        # Find and delete the like
+        like = Like.objects.filter(post=post, user=request.user)
+        if like.exists():
+            like.delete()
+            return Response({'detail': 'Post unliked successfully.'}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response({'detail': 'You have not liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
