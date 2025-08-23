@@ -28,7 +28,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'mikenickson.pythonanywhere.com',  # Add this line
+    'mikenickson.pythonanywhere.com',
 ]
 
 # Application definition
@@ -131,3 +131,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # social_media_api/settings.py
 
 AUTH_USER_MODEL = 'accounts.User'
+# Security Settings
+# Enforces the browser to use a basic XSS filter
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevents clickjacking by disabling the site's use in iframes
+X_FRAME_OPTIONS = 'DENY'
+
+# Redirects all non-HTTPS requests to HTTPS
+# Note: This requires an SSL certificate and may cause issues in development
+# You should only set this to True in a production environment
+SECURE_SSL_REDIRECT = True
