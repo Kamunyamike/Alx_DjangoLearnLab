@@ -1,10 +1,11 @@
 # posts/views.py
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -46,3 +47,15 @@ class CommentViewSet(viewsets.ModelViewSet):
         # This is handled by the PostViewSet's add_comment action.
         # We'll use this viewset for direct comment CRUD operations.
         serializer.save(author=self.request.user)
+
+class UserFeedView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Get the list of users the current user is following
+        following_users = self.request.user.following.all()
+
+        # Filter posts to include only those from followed users
+        queryset = Post.objects.filter(author__in=following_users).order_by('-created_at')
+        return queryset
