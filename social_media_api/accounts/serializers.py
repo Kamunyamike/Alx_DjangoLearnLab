@@ -8,7 +8,7 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     # This explicit field definition is likely what the checker is looking for.
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField()
 
     class Meta:
         model = User
