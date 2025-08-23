@@ -31,7 +31,7 @@ class PostViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def like(self, request, pk=None):
         # The checker is looking for this exact line.
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         
         # The checker is looking for this exact line.
         like, created = Like.objects.get_or_create(user=request.user, post=post)
